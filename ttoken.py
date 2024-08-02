@@ -1,10 +1,12 @@
-#---------------------------------------------------
+# ---------------------------------------------------
 # Tradutor para a linguagem MiniPascal
 #
 # versao 1a (ago-2024)
-#---------------------------------------------------
+# ---------------------------------------------------
 
 from enum import IntEnum
+
+
 class TOKEN(IntEnum):
     erro = 1 
     eof = 2
@@ -15,10 +17,9 @@ class TOKEN(IntEnum):
     REAL = 7
     PROGRAM = 8
     FUNCTION = 9
-    PROCEDURE = 10 ##FUNCÃO VOID
-    assignop = 11 ##operador de atribuição
+    PROCEDURE = 10  # FUNCÃO VOID
+    assignop = 11  # operador de atribuição
     INTEGER = 12
-
 
     BEGIN = 13
     END = 14
@@ -40,54 +41,65 @@ class TOKEN(IntEnum):
     fechaParentese = 29
     doisPontos = 30
 
-    RELOP = 31 # menor ou igual, menor, igual, maior ou igual, maior
-    MULOP = 32 # multiplicacao, divisao e mod
-    ADDOP = 33 # adição e subtração
-    OF = 34 # array de um tipo
+    relop = 31  # menor ou igual, menor, igual, maior ou igual, maior
+    MULOP = 32  # multiplicacao, divisao e mod
+    ADDOP = 33  # adição e subtração
+    OF = 34  # array de um tipo
+
+    string = 35
+    write = 36
+    writeln = 37
+    read = 38
+    readln = 39
 
 
     @classmethod
     def msg(cls, token):
         nomes = {
-            1:'erro',
-            2:'<eof>',
-            3:'identificador',
-            4:'variavel',
-            5:'numero inteiro',
-            6:'número real',
-            7:'real',
-            8:'program',
-            9:'funcrion',
-            10:'procedure',
-            11:'=',
-            12:'inteiro',
-            13:'begin',
-            14:'end',
-            15:'array',
-            16:'while',
-            17:'do',
-            18:'if',
-            19:'then',
-            20:'else',
-            21:'not',
-            22:',',
-            23:';',
-            24:'.',
-            25:'..',
-            26:'[',
-            27:']',
-            28:'(',
-            29:')',
-            30:':',
-            31:'operador relacional (<=, <, ==, >, >=)',
-            32:'operador de multiplicação (*, /, mod)',
-            33:'operador de soma (+, -)',
-            34:'of',
-
+            1: 'erro',
+            2: '<eof>',
+            3: 'identificador',
+            4: 'variavel',
+            5: 'numero inteiro',
+            6: 'número real',
+            7: 'real',
+            8: 'program',
+            9: 'funcrion',
+            10: 'procedure',
+            11: ':=',
+            12: 'inteiro',
+            13: 'begin',
+            14: 'end',
+            15: 'array',
+            16: 'while',
+            17: 'do',
+            18: 'if',
+            19: 'then',
+            20: 'else',
+            21: 'not',
+            22: ',',
+            23: ';',
+            24: '.',
+            25: '..',
+            26: '[',
+            27: ']',
+            28: '(',
+            29: ')',
+            30: ':',
+            31: 'operador relacional (<=, <, =, >, =>)',
+            32: 'operador de multiplicação (*, /, mod)',
+            33: 'operador de soma (+, -)',
+            34: 'of',
+            35: 'string',
+            36: 'write',
+            37: 'writeln',
+            38: 'read',
+            39: 'readln'
         }
         return nomes[token]
+
     @classmethod
-    def reservada(clscls, lexema):
+    def reservada(cls, lexema):
         reservadas = {
             'program': TOKEN.PROGRAM,
             'if': TOKEN.IF,
