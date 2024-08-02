@@ -6,7 +6,7 @@
 
 from enum import IntEnum
 class TOKEN(IntEnum):
-    erro = 1
+    erro = 1 
     eof = 2
     id = 3
     VAR = 4
@@ -59,7 +59,7 @@ class TOKEN(IntEnum):
             8:'program',
             9:'funcrion',
             10:'procedure',
-            11:'assignop',
+            11:'=',
             12:'inteiro',
             13:'begin',
             14:'end',
@@ -79,7 +79,7 @@ class TOKEN(IntEnum):
             28:'(',
             29:')',
             30:':',
-            31:'operador relacional (<=, <, =, >, >=)',
+            31:'operador relacional (<=, <, ==, >, >=)',
             32:'operador de multiplicação (*, /, mod)',
             33:'operador de soma (+, -)',
             34:'of',

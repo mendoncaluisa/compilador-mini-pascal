@@ -69,8 +69,30 @@ class Lexico:
                     estado = 2 # identificadores e palavras reservadas
                 elif simbolo.isdigit():
                     estado = 3 # números
+                elif simbolo == '"':
+                    estado = 4 #strings
+                elif simbolo == "(":
+                    return (TOKEN.abreParentese, "(", lin, col)
+                elif simbolo == ")":
+                    return (TOKEN.fechaParentese, ")", lin, col)
+                elif simbolo == ",":
+                    return(TOKEN.virg, ",", lin, col)
+                elif simbolo == ";":
+                    return(TOKEN.ptoVirg, ";", lin, col)
+                elif simbolo == ":":
+                    return (TOKEN.doisPontos, ":", lin, col)
+                elif simbolo == "..":
+                    return(TOKEN.ptoPto, "..", lin, col)
+                elif simbolo == "[":
+                    return(TOKEN.abreColchete, "[", lin, col)
+                elif simbolo == "]":
+                    return(TOKEN.fechaColchete, "]", lin, col)
                 elif simbolo == 'eof':
                     return(TOKEN.eof, '<eof>', lin, col)
+                elif simbolo == ".": # pode ser . ou ..
+                    estado = 5
+                elif simbolo == "=": # pode ser =, >=, =<,
+                    estado = 6
 
             elif estado == 2:
                 #identificadores e palavras reservadas
@@ -93,4 +115,43 @@ class Lexico:
                 else:
                     self.ungetchar(simbolo)
                     return (TOKEN.num, lexema, lin, col)
+                
+            
+            elif estado == 4:
+                # strings
+                while True:
+                    if simbolo == '"':
+                        lexema += simbolo
+                        return (TOKEN.string, lexema, lin, col)
+                    if simbolo in ['\n', 'eof']:
+                        return (TOKEN.erro, lexema, lin, col)
+                    if simbolo == '\\':  # isso é por causa do python
+                        lexema += simbolo
+                        simbolo = self.getchar()
+                        if simbolo in ['\n', '\0']:
+                            return (TOKEN.erro, lexema, lin, col)
 
+                    lexema = lexema + simbolo
+                    simbolo = self.getchar()
+            
+            elif estado == 5: 
+                if simbolo == '.':
+                    lexema = lexema + simbolo
+                    return (TOKEN.ptoPto, lexema, lin, col)
+                else:
+                    self.ungetchar(simbolo)
+                    return (TOKEN.pto, lexema, lin, col)
+                
+            elif estado == 6:
+                if simbolo == '=':
+                    lexema = lexema + simbolo
+                    return (TOKEN.RELOP, lexema, lin, col)
+                else:
+                    self.ungetchar(simbolo)
+                    return(TOKEN.assignop, lexema, lin, col)
+                
+            else:
+                print('BUG!!!')
+
+            lexema = lexema + simbolo
+            simbolo = self.getchar()
