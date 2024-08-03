@@ -22,7 +22,7 @@ class Lexico:
 
     def getchar(self):
         if self.fim_do_arquivo():
-            return 'eof'
+            return '\0'
         caractere = self.fonte[self.indiceFonte]
         self.indiceFonte += 1
         if caractere == '\n':
@@ -51,20 +51,20 @@ class Lexico:
         estado = 1
         simbolo = self.getchar()
         lexema = ''
+
         while simbolo in ['/', '\t', ' ', '\n']:
-            # descarta comentario que iniciam com //
-            if simbolo == '/':  # DEFININDO COMENTARIOS COMO //
+            if simbolo == '/':
                 simbolo = self.getchar()
                 if simbolo == '/':
+                    # comentario
                     simbolo = self.getchar()
-                    
                     while simbolo != '\n':
                         simbolo = self.getchar()
-                else:
-                    self.ungetchar(simbolo)
-                    simbolo = '/'
-        while simbolo in [" ", "\t", "\n"]:
-            simbolo = self.getchar()
+                else: 
+                    estado = 9
+            while simbolo in [' ', '\t', '\n']:
+                simbolo = self.getchar()
+                
                 
         # aqui vai começar a pegar um token...
         lin = self.linha  # onde inicia o token, para msgs
@@ -129,7 +129,25 @@ class Lexico:
                 else:
                     self.ungetchar(simbolo)
                     return TOKEN.numInteger, lexema, lin, col
-
+                
+            elif estado == 31:
+                # parte real do numero
+                if simbolo.isdigit():
+                    estado = 32
+                else:
+                    self.ungetchar(simbolo)
+                    return (TOKEN.erro, lexema, lin, col)
+            elif estado == 32:
+                # parte real do numero
+                if simbolo.isdigit():
+                    estado = 32
+                elif simbolo.isalpha():
+                    lexema += simbolo
+                    return (TOKEN.erro, lexema, lin, col)
+                else:
+                    self.ungetchar(simbolo)
+                    return (TOKEN.numReal, lexema, lin, col)
+                    
             elif estado == 4:
                 # strings
                 while True:
@@ -178,9 +196,21 @@ class Lexico:
                 else:
                     self.ungetchar(simbolo)
                     return TOKEN.relop, lexema, lin, col
-
+                
+            elif estado == 9:
+                return TOKEN.MULOP, '/', lin, col
             else:
                 print('BUG!!!')
 
             lexema = lexema + simbolo
             simbolo = self.getchar()
+
+
+    def testaLexico(self):
+        self.tokenLido = self.get_token()
+        (token, lexema, linha, coluna) = self.tokenLido
+        while token != TOKEN.eof:
+            self.imprime_token(self.tokenLido)
+            self.tokenLido = self.get_token()
+            (token, lexema, linha, coluna) = self.tokenLido
+
