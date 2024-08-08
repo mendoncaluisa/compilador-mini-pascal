@@ -11,20 +11,20 @@ class Lexico:
     def __init__(self, arqfonte):
         self.arqfonte = arqfonte  # objeto file
         self.fonte = self.arqfonte.read()  # string contendo file
-        self.tamFonte = len(self.fonte)
-        self.indiceFonte = 0
-        self.tokenLido = None  # (token, lexema, linha, coluna)
+        self.tam_fonte = len(self.fonte)
+        self.indice_fonte = 0
+        self.token_lido = None  # (token, lexema, linha, coluna)
         self.linha = 1  # linha atual no fonte
         self.coluna = 0  # coluna atual no fonte
 
     def fim_do_arquivo(self):
-        return self.indiceFonte >= self.tamFonte
+        return self.indice_fonte >= self.tam_fonte
 
     def getchar(self):
         if self.fim_do_arquivo():
             return '\0'
-        caractere = self.fonte[self.indiceFonte]
-        self.indiceFonte += 1
+        caractere = self.fonte[self.indice_fonte]
+        self.indice_fonte += 1
         if caractere == '\n':
             self.linha += 1
             # colocar self.coluna = 1 também está funcionando, ver qual dos dois está realmente certo
@@ -37,8 +37,11 @@ class Lexico:
         if simbolo == '\n':
             self.linha -= 1
 
-        if self.indiceFonte > 0:
-            self.indiceFonte -= 1
+        if simbolo == '\0':
+            return
+
+        if self.indice_fonte > 0:
+            self.indice_fonte -= 1
 
         self.coluna -= 1
 
@@ -64,8 +67,7 @@ class Lexico:
                     estado = 9
             while simbolo in [' ', '\t', '\n']:
                 simbolo = self.getchar()
-                
-                
+
         # aqui vai começar a pegar um token...
         lin = self.linha  # onde inicia o token, para msgs
         col = self.coluna  # onde inicia o token, para msgs
@@ -95,7 +97,7 @@ class Lexico:
                     return TOKEN.abreColchete, "[", lin, col
                 elif simbolo == "]":
                     return TOKEN.fechaColchete, "]", lin, col
-                elif simbolo == 'eof':
+                elif simbolo == '\0':
                     return TOKEN.eof, '<eof>', lin, col
                 elif simbolo == ".":  # pode ser . ou ..
                     estado = 5
@@ -103,7 +105,7 @@ class Lexico:
                     return TOKEN.relop, '=', lin, col
                 elif simbolo == ">":  # pode ser >=,  >
                     estado = 7
-                elif simbolo == "<":  # pode se <, <=
+                elif simbolo == "<":  # pode ser <, <=
                     estado = 8
                 elif simbolo == "*": 
                     return TOKEN.MULOP, "*", lin, col
@@ -121,7 +123,7 @@ class Lexico:
                 # numeros
                 if simbolo.isdigit():
                     estado = 3
-                elif simbolo == '.':
+                elif simbolo == '.':  # tratando de casos que sejam numero de ponto flutuante
                     estado = 31
                 elif simbolo.isalpha():
                     lexema += simbolo
@@ -136,17 +138,17 @@ class Lexico:
                     estado = 32
                 else:
                     self.ungetchar(simbolo)
-                    return (TOKEN.erro, lexema, lin, col)
+                    return TOKEN.erro, lexema, lin, col
             elif estado == 32:
                 # parte real do numero
                 if simbolo.isdigit():
                     estado = 32
                 elif simbolo.isalpha():
                     lexema += simbolo
-                    return (TOKEN.erro, lexema, lin, col)
+                    return TOKEN.erro, lexema, lin, col
                 else:
                     self.ungetchar(simbolo)
-                    return (TOKEN.numReal, lexema, lin, col)
+                    return TOKEN.numReal, lexema, lin, col
                     
             elif estado == 4:
                 # strings
@@ -165,8 +167,8 @@ class Lexico:
                     lexema = lexema + simbolo
                     simbolo = self.getchar()
             
-            elif estado == 5: 
-                if simbolo == '.':
+            elif estado == 5:
+                if simbolo == '.':  # tratando de casos que sejam '..' ou '.'
                     lexema = lexema + simbolo
                     return TOKEN.ptoPto, lexema, lin, col
                 else:
@@ -174,7 +176,7 @@ class Lexico:
                     return TOKEN.pto, lexema, lin, col
                 
             elif estado == 6:
-                if simbolo == '=':
+                if simbolo == '=':  # tratando de casos que sejam ':= ' ou ':'
                     lexema = lexema + simbolo
                     return TOKEN.assignop, lexema, lin, col
                 else:
@@ -182,7 +184,7 @@ class Lexico:
                     return TOKEN.doisPontos, lexema, lin, col
 
             elif estado == 7:
-                if simbolo == '=':
+                if simbolo == '=':  # tratando casos de > ou >=
                     lexema = lexema + simbolo
                     return TOKEN.relop, lexema, lin, col
                 else:
@@ -190,7 +192,7 @@ class Lexico:
                     return TOKEN.relop, lexema, lin, col
 
             elif estado == 8:
-                if simbolo == '=':
+                if simbolo == '=':  # tratando casos de < ou <=
                     lexema = lexema + simbolo
                     return TOKEN.relop, lexema, lin, col
                 else:
@@ -204,13 +206,3 @@ class Lexico:
 
             lexema = lexema + simbolo
             simbolo = self.getchar()
-
-
-    def testaLexico(self):
-        self.tokenLido = self.get_token()
-        (token, lexema, linha, coluna) = self.tokenLido
-        while token != TOKEN.eof:
-            self.imprime_token(self.tokenLido)
-            self.tokenLido = self.get_token()
-            (token, lexema, linha, coluna) = self.tokenLido
-

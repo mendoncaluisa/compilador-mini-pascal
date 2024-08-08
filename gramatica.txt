@@ -68,6 +68,7 @@
 	| <compound_statement>
 	| <if_statement>
 	| while <expression> do <statement>
+	| <inputOutput>
 
 <if_statement> ->
 	if <expression> then <statement> <opc_else>
@@ -101,22 +102,22 @@
 	<simple_expression> <resto_expression>
 	
 <resto_expression> ->
-	relop <simple_expression> <resto_expression>
-	| LAMBDA 
+	LAMBDA
+	| relop <simple_expression> <resto_expression>
 
 <simple_expression> ->
 	<term> <resto_simple_expression>
 
 <resto_simple_expression> ->
-	addop <term> <resto_simple_expression>
-	| LAMBDA 
+	LAMBDA
+	| addop <term> <resto_simple_expression>
 
 <term> ->
 	<uno> <resto_term>
-	
+
 <resto_term> ->
-    mulop <uno> <resto_term>
-    | LAMBDA 
+    LAMBDA
+    | mulop <uno> <resto_term>
 
 <uno> ->
     <factor>
@@ -127,7 +128,26 @@
 	| num
 	| ( <expression> )
 	| not <factor>
-	
+
 <resto_id> ->
-	( <expression_list> )
-	| LAMBDA
+	LAMBDA
+	| ( <expression_list> )
+
+
+<inputOutput> ->
+    writeln(<outputs>)
+    | write(<outputs>)
+    | read(id)
+    | readln(id)
+
+<outputs> ->
+    <out> <restoOutputs>
+
+<restoOutputs> ->
+    , <out> <restoOutputs>
+    | LAMBDA
+
+<out> ->
+    num
+    | id
+    | string

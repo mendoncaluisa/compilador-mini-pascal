@@ -52,7 +52,6 @@ class TOKEN(IntEnum):
     read = 38
     readln = 39
 
-
     @classmethod
     def msg(cls, token):
         nomes = {
