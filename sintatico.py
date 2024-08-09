@@ -111,7 +111,7 @@ class Sintatico:
             self.consome(TOKEN.OF)
             self.standard_type()
 
-        elif token_lido[0] == TOKEN.numReal or token_lido[0] == TOKEN.numInteger:
+        elif token_lido[0] == TOKEN.numReal | token_lido[0] == TOKEN.numInteger:
             self.standard_type()
 
     def standard_type(self):  # <standard_type>
@@ -138,7 +138,6 @@ class Sintatico:
         self.subprogram_head()
         self.declarations()
         self.compound_statement()
-
 
     def subprogram_head(self):  # <subprogram_head>
         
@@ -217,8 +216,24 @@ class Sintatico:
             pass
 
     def statement(self):  # <statement>
-        
-        pass
+        # SE INICIA COM <variable>
+            self.variable()
+            self.consome(TOKEN.assignop)
+            self.expression()
+        # SE INICIA COM <procedure_statement>
+            self.procedure_statement()
+        # SE INICIA COM <if_statement>
+            self.if_statement()
+        # SE INICIA COM <compound_statement>
+            self.compound_statement()
+        # SE INICIA COM while
+            self.consome(TOKEN.WHILE)
+            self.expression()
+            self.consome(TOKEN.DO)
+            self.statement()
+        # SE INICIA COM <input_output>
+            self.input_output()
+
 
     def if_statement(self):  # <if_statement>
 
