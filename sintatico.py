@@ -244,11 +244,11 @@ class Sintatico:
         self.opc_else()
 
     def opc_else(self):  # <opc_else>
-
-        self.consome(TOKEN.ELSE)
-        self.statement()
-        
-        pass
+        if token_lido[0] == TOKEN.ELSE:
+            self.consome(TOKEN.ELSE)
+            self.statement()
+        else:
+            pass
 
     def variable(self):  # <variable>
         

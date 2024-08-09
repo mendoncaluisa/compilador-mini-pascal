@@ -136,6 +136,11 @@ class Lexico:
                 # parte real do numero
                 if simbolo.isdigit():
                     estado = 32
+                elif simbolo == '.':
+                    self.ungetchar(simbolo)
+                    self.ungetchar(simbolo)
+                    lexema += simbolo
+                    return TOKEN.numInteger, lexema, lin, col
                 else:
                     self.ungetchar(simbolo)
                     return TOKEN.erro, lexema, lin, col
