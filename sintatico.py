@@ -1,9 +1,9 @@
 # ---------------------------------------------------
 # Tradutor para a linguagem CALC
 #
-# versao 1a (mar-2024)
+# versao 1a (ago-2024)
 # ---------------------------------------------------
-from lexico import TOKEN, Lexico
+from lexico import Lexico
 
 
 #  from semantico import Semantico
@@ -64,7 +64,7 @@ class Sintatico:
         lexema = self.token_lido[1]
         self.consome(TOKEN.id)
         self.consome(TOKEN.abreParentese)
-        self.identifier_list()  # <identifier_list>
+        # self.identifier_list()  # <identifier_list>
         self.consome(TOKEN.fechaParentese)
         self.consome(TOKEN.ptoVirg)
         self.declarations()  # <declarations>
@@ -78,22 +78,27 @@ class Sintatico:
         pass
 
     def resto_identifier_list(self):  # <resto_identifier_list>
-        while token_lido ==  TOKEN.virg:
-            self.consome(TOKEN.virg)
-            self.consome(TOKEN.id)
-        
-        pass
+        if token_lido[0] == TOKEN.virg:
+            while token_lido[0] ==  TOKEN.virg:
+                self.consome(TOKEN.virg)
+                self.consome(TOKEN.id)
+
+        else:
+            pass
 
     def declarations(self):  # <declarations>
-        
-        while token_lido[0] == TOKEN.variavel:
-            self.consome(TOKEN.variavel)
-            self.identifier_list()
-            self.consome(TOKEN.doisPontos)
-            self.type()
-            self.consome(TOKEN.ptoVirg)
-        
-        pass
+        if token_lido[0] == TOKEN.variavel:
+
+            while token_lido[0] == TOKEN.variavel:
+
+                self.consome(TOKEN.variavel)
+                self.identifier_list()
+                self.consome(TOKEN.doisPontos)
+                self.type()
+                self.consome(TOKEN.ptoVirg)
+
+        else:
+            pass
 
     def type(self):  # <type>
         
@@ -106,17 +111,27 @@ class Sintatico:
             self.consome(TOKEN.OF)
             self.standard_type()
 
+        elif token_lido[0] == TOKEN.numReal or token_lido[0] == TOKEN.numInteger:
+            self.standard_type()
+
     def standard_type(self):  # <standard_type>
 
+        if token_lido[0] == TOKEN.numInteger:
+            self.consome(TOKEN.numInteger)
+
+        elif token_lido[0] == TOKEN.numReal:
+            self.consome(TOKEN.numReal)
         pass
 
     def subprogram_declarations(self):  # <subprogram_declarations>
-        
-        while token_lido == subprogram_declaration():
-            self.subprogram_declaration
-            self.consome(TOKEN.ptoVirg)
-        
-        pass
+
+        if token_lido[0] == subprogram_declaration():
+            while token_lido == subprogram_declaration():
+                self.subprogram_declaration()
+                self.consome(TOKEN.ptoVirg)
+
+        else:
+            pass
 
     def subprogram_declaration(self):  # <subprogram_declaration>
         
@@ -139,15 +154,18 @@ class Sintatico:
             self.consome(TOKEN.reservada)
             self.consome(TOKEN.id)
             self.arguments()
+            self.consome(TOKEN.ptoVirg)
 
 
     def arguments(self):  # <arguments>
-        
-        self.consome(TOKEN.abreParentese)
-        self.parameter_list()
-        self.consome(TOKEN.fechaParentese)
 
-        pass
+        if token_lido[0] == TOKEN.abreParentese:
+            self.consome(TOKEN.abreParentese)
+            self.parameter_list()
+            self.consome(TOKEN.fechaParentese)
+
+        else:
+            pass
 
     def parameter_list(self):  # <parameter_list>
 
@@ -159,13 +177,15 @@ class Sintatico:
 
     def resto_parameter_list(self):  # <resto_parameter_list> ->
 
-        while token_lido == TOKEN.ptoVirg
-            self.consome(TOKEN.ptoVirg)  # ;
-            self.identifier_list()  # identifier_list
-            self.consome(TOKEN.doisPontos)  # :
-            self.type()  # type       
+        if token_lido == TOKEN.ptoVirg:
+            while token_lido == TOKEN.ptoVirg:
+                self.consome(TOKEN.ptoVirg)  # ;
+                self.identifier_list()  # identifier_list
+                self.consome(TOKEN.doisPontos)  # :
+                self.type()  # type
 
-        pass
+        else:
+            pass
 
     def compound_statement(self):  # <compound_statement>
         
@@ -174,10 +194,12 @@ class Sintatico:
         self.consome(TOKEN.END)
 
     def optional_statements(self):  # <optional_statements>
-        
-        self.statement_list()
 
-        pass
+        if token_lido[0] != TOKEN.END:
+            self.statement_list()
+
+        else:
+            pass
 
     def statement_list(self):  # <statement_list>
         
@@ -185,12 +207,14 @@ class Sintatico:
         self.resto_statement_list()
 
     def resto_statement_list(self):  # <resto_statement_list>
-        
-        while token_lido[0] == TOKEN.ptoVirg
-            self.consome(TOKEN.ptoVirg)
-            self.statement()
-        
-        pass
+
+        if token_lido[0] == TOKEN.ptoVirg:
+            while token_lido[0] == TOKEN.ptoVirg:
+                self.consome(TOKEN.ptoVirg)
+                self.statement()
+
+        else:
+            pass
 
     def statement(self):  # <statement>
         
@@ -217,39 +241,44 @@ class Sintatico:
         self.opc_else()
 
     def opc_index(self):  # <opc_index>
-        
-        self.consome(TOKEN.abreColchete)
-        self.expression()
-        self.consome(TOKEN.fechaColchete)
-        
-        pass
+
+        if token_lido[0] != TOKEN.assignop:
+            self.consome(TOKEN.abreColchete)
+            self.expression()
+            self.consome(TOKEN.fechaColchete)
+
+        else:
+            pass
 
     def procedure_statement(self):  # <procedure_statement>
         
         self.consome(TOKEN.id)
-        self.opc_parameters
+        self.opc_parameters()
 
 
     def opc_parameters(self):  # <opc_parameters>
-        
-        self.consome(TOKEN.abreParentese)
-        self.expression_list
-        self.consome(TOKEN.fechaParentese)
 
-        pass
+        if token_lido[0] == TOKEN.abreParentese:
+            self.consome(TOKEN.abreParentese)
+            self.expression_list()
+            self.consome(TOKEN.fechaParentese)
+        else:
+            pass
 
     def expression_list(self):  # <expression_list>
-        
+
         self.expression()
         self.resto_expression_list()
 
     def resto_expression_list(self):  # <resto_expression_list>
-        
-        self.consome(TOKEN.ptoVirg)
-        self.expression()
-        self.resto_expression_list()
-        
-        pass
+
+        if token_lido[0] == TOKEN.virg:
+            self.consome(TOKEN.ptoVirg)
+            self.expression()
+            self.resto_expression_list()
+
+        else:
+            pass
 
     def expression(self):  # <expression>
         
@@ -257,12 +286,14 @@ class Sintatico:
         self.resto_expression()
 
     def resto_expression(self):  # <resto_expression>
-        
-        self.consome(TOKEN.relop)
-        self.simple_expression()
-        self.resto_expression()
-        
-        pass
+
+        if token_lido[0] == TOKEN.relop:
+            self.consome(TOKEN.relop)
+            self.simple_expression()
+            self.resto_expression()
+
+        else:
+            pass
 
     def simple_expression(self):  # <simple_expression>
         
@@ -270,12 +301,14 @@ class Sintatico:
         self.resto_simple_expression()
 
     def resto_simple_expression(self):  # <resto_simple_expression>
-        
-        while token_lido[0] == TOKEN.ADDOP:
-            self.consome(TOKEN.ADDOP)
-            self.term()
-        
-        pass
+
+        if token_lido[0] == TOKEN.ADDOP:
+            while token_lido[0] == TOKEN.ADDOP:
+                self.consome(TOKEN.ADDOP)
+                self.term()
+
+        else:
+            pass
 
     def term(self):  # <term>
 
@@ -283,12 +316,14 @@ class Sintatico:
         self.resto_term()
 
     def resto_term(self):  # <resto_term>
-        
-        while token_lido[0] == TOKEN.MULOP:
-            self.consome(TOKEN.MULOP)
-            self.uno()
-        
-        pass
+
+        if token_lido[0] == TOKEN.MULOP:
+            while token_lido[0] == TOKEN.MULOP:
+                self.consome(TOKEN.MULOP)
+                self.uno()
+
+        else:
+            pass
 
     def uno(self):  # <uno>
 
@@ -321,12 +356,14 @@ class Sintatico:
             self.factor()
 
     def resto_id(self):  # <resto_id>
-        
-        self.consome(TOKEN.abreParentese)
-        self.expression_list()
-        self.consome(TOKEN.fechaParentese)
-        
-        pass
+
+        if token_lido[0] == TOKEN.abreParentese:
+            self.consome(TOKEN.abreParentese)
+            self.expression_list()
+            self.consome(TOKEN.fechaParentese)
+
+        else:
+            pass
 
     def input_output(self):  # <inputOutput>
 

@@ -1,7 +1,7 @@
 # ---------------------------------------------------
 # Tradutor para a linguagem CALC
 #
-# versao 1a (mar-2024)
+# versao 1a (ago-2024)
 # ---------------------------------------------------
 from lexico import Lexico
 
