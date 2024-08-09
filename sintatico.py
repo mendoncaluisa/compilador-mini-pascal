@@ -64,121 +64,320 @@ class Sintatico:
         lexema = self.token_lido[1]
         self.consome(TOKEN.id)
         self.consome(TOKEN.abreParentese)
-        self.identificador_lista()  # <identifier_list>
+        self.identifier_list()  # <identifier_list>
         self.consome(TOKEN.fechaParentese)
         self.consome(TOKEN.ptoVirg)
-        self.declaracoes()  # <declarations>
-        self.declaracao_subprograma()  # <subprogram_declarations>
-        self.comando_composto()  # <compound_statement>
+        self.declarations()  # <declarations>
+        self.subprogram_declaration()  # <subprogram_declarations>
+        self.compound_statement()  # <compound_statement>
         self.consome(TOKEN.pto)
 
-    def identificador_lista(self):  # <identifier_list>
+    def identifier_list(self):  # <identifier_list>
+        self.consome(TOKEN.id)
+        self.resto_identifier_list()
         pass
 
-    def resto_identificador_lista(self):  # <resto_identifier_list>
+    def resto_identifier_list(self):  # <resto_identifier_list>
+        while token_lido ==  TOKEN.virg:
+            self.consome(TOKEN.virg)
+            self.consome(TOKEN.id)
+        
         pass
 
-    def declaracoes(self):  # <declarations>
+    def declarations(self):  # <declarations>
+        
+        while token_lido[0] == TOKEN.variavel:
+            self.consome(TOKEN.variavel)
+            self.identifier_list()
+            self.consome(TOKEN.doisPontos)
+            self.type()
+            self.consome(TOKEN.ptoVirg)
+        
         pass
 
-    def tipo(self):  # <type>
+    def type(self):  # <type>
+        
+        if token_lido[0] == TOKEN.string:
+            self.consome(TOKEN.string)
+            self.consome(TOKEN.abreColchete)
+            self.consome(TOKEN.numInteger)
+            self.consome(TOKEN.ptoPto)
+            self.consome(TOKEN.numInteger)
+            self.consome(TOKEN.OF)
+            self.standard_type()
+
+    def standard_type(self):  # <standard_type>
+
         pass
 
-    def standard_tipo(self):  # <standard_type>
+    def subprogram_declarations(self):  # <subprogram_declarations>
+        
+        while token_lido == subprogram_declaration():
+            self.subprogram_declaration
+            self.consome(TOKEN.ptoVirg)
+        
         pass
 
-    def declaracoes_subprgrama(self):  # <subprogram_declarations>
+    def subprogram_declaration(self):  # <subprogram_declaration>
+        
+        self.subprogram_head()
+        self.declarations()
+        self.compound_statement()
+
+
+    def subprogram_head(self):  # <subprogram_head>
+        
+        if token_lido == 'function':
+            self.consome(TOKEN.reservada)
+            self.consome(TOKEN.id)
+            self.arguments()
+            self.consome(TOKEN.doisPontos)
+            self.standard_type()
+            self.consome(TOKEN.ptoVirg)
+        
+        elif token_lido == 'procedure':
+            self.consome(TOKEN.reservada)
+            self.consome(TOKEN.id)
+            self.arguments()
+
+
+    def arguments(self):  # <arguments>
+        
+        self.consome(TOKEN.abreParentese)
+        self.parameter_list()
+        self.consome(TOKEN.fechaParentese)
+
         pass
 
-    def declaracao_subprograma(self):  # <subprogram_declaration>
+    def parameter_list(self):  # <parameter_list>
+
+        self.identifier_list()
+        self.consome(TOKEN.doisPontos)
+        self.type()
+        self.resto_parameter_list()
+
+
+    def resto_parameter_list(self):  # <resto_parameter_list> ->
+
+        while token_lido == TOKEN.ptoVirg
+            self.consome(TOKEN.ptoVirg)  # ;
+            self.identifier_list()  # identifier_list
+            self.consome(TOKEN.doisPontos)  # :
+            self.type()  # type       
+
         pass
 
-    def cabecalho_subprograma(self):  # <subprogram_head>
+    def compound_statement(self):  # <compound_statement>
+        
+        self.consome(TOKEN.BEGIN)
+        self.optional_statements()
+        self.consome(TOKEN.END)
+
+    def optional_statements(self):  # <optional_statements>
+        
+        self.statement_list()
+
         pass
 
-    def argumentos(self):  # <arguments>
+    def statement_list(self):  # <statement_list>
+        
+        self.statement()
+        self.resto_statement_list()
+
+    def resto_statement_list(self):  # <resto_statement_list>
+        
+        while token_lido[0] == TOKEN.ptoVirg
+            self.consome(TOKEN.ptoVirg)
+            self.statement()
+        
         pass
 
-    def parametros_lista(self):  # <parameter_list>
+    def statement(self):  # <statement>
+        
         pass
 
-    def resto_parametros_lista(self):  # <resto_parameter_list> ->
+    def if_statement(self):  # <if_statement>
+
+        self.consome(TOKEN.IF)
+        self.expression()
+        self.consome(TOKEN.THEN)
+        self.statement()
+        self.opc_else()
+
+    def opc_else(self):  # <opc_else>
+
+        self.consome(TOKEN.ELSE)
+        self.statement()
+        
         pass
 
-    def comando_composto(self):  # <compound_statement>
+    def variable(self):  # <variable>
+        
+        self.consome(TOKEN.id)
+        self.opc_else()
+
+    def opc_index(self):  # <opc_index>
+        
+        self.consome(TOKEN.abreColchete)
+        self.expression()
+        self.consome(TOKEN.fechaColchete)
+        
         pass
 
-    def comando_opcional(self):  # <optional_statements>
+    def procedure_statement(self):  # <procedure_statement>
+        
+        self.consome(TOKEN.id)
+        self.opc_parameters
+
+
+    def opc_parameters(self):  # <opc_parameters>
+        
+        self.consome(TOKEN.abreParentese)
+        self.expression_list
+        self.consome(TOKEN.fechaParentese)
+
         pass
 
-    def comando_list(self):  # <statement_list>
+    def expression_list(self):  # <expression_list>
+        
+        self.expression()
+        self.resto_expression_list()
+
+    def resto_expression_list(self):  # <resto_expression_list>
+        
+        self.consome(TOKEN.ptoVirg)
+        self.expression()
+        self.resto_expression_list()
+        
         pass
 
-    def resto_comando_lista(self):  # <resto_statement_list>
+    def expression(self):  # <expression>
+        
+        self.simple_expression()
+        self.resto_expression()
+
+    def resto_expression(self):  # <resto_expression>
+        
+        self.consome(TOKEN.relop)
+        self.simple_expression()
+        self.resto_expression()
+        
         pass
 
-    def comando(self):  # <statement>
+    def simple_expression(self):  # <simple_expression>
+        
+        self.term()
+        self.resto_simple_expression()
+
+    def resto_simple_expression(self):  # <resto_simple_expression>
+        
+        while token_lido[0] == TOKEN.ADDOP:
+            self.consome(TOKEN.ADDOP)
+            self.term()
+        
         pass
 
-    def comando_if(self):  # <if_statement>
-        pass
+    def term(self):  # <term>
 
-    def else_opcional(self):  # <opc_else>
-        pass
+        self.uno()
+        self.resto_term()
 
-    def variavel(self):  # <variable>
-        pass
-
-    def index_opcional(self):  # <opc_index>
-        pass
-
-    def procedimento_comando(self):  # <procedure_statement>
-        pass
-
-    def parametros_opcionais(self):  # <opc_parameters>
-        pass
-
-    def lista_expressao(self):  # <expression_list>
-        pass
-
-    def resto_lista_expressao(self):  # <resto_expression_list>
-        pass
-
-    def expressao(self):  # <expression>
-        pass
-
-    def resto_expressao(self):  # <resto_expression>
-        pass
-
-    def expressao_simples(self):  # <simple_expression>
-        pass
-
-    def resto_expressao_simples(self):  # <resto_simple_expression>
-        pass
-
-    def termo(self):  # <term>
-        pass
-
-    def resto_termo(self):  # <resto_term>
+    def resto_term(self):  # <resto_term>
+        
+        while token_lido[0] == TOKEN.MULOP:
+            self.consome(TOKEN.MULOP)
+            self.uno()
+        
         pass
 
     def uno(self):  # <uno>
+
+        if token_lido[0] == TOKEN.ADDOP:
+            self.consome(TOKEN.ADDOP)
+            self.factor()
+        
+        else:
+            self.factor()
+
+    def factor(self):  # <factor>
+        
+        if token_lido[0] == TOKEN.id:
+            self.consome(TOKEN.id)
+            self.resto_id()
+        
+        elif token_lido[0] == TOKEN.numInteger:
+            self.consome(TOKEN.numInteger)
+
+        elif token_lido[0] == TOKEN.numReal:
+            self.consome(TOKEN.numReal)
+        
+        elif token_lido[0] == TOKEN.abreParentese:
+            self.consome(TOKEN.abreParentese)
+            self.expression()
+            self.consome(TOKEN.fechaParentese)
+
+        elif token_lido[0] == TOKEN.NOT:
+            self.consome(TOKEN.NOT)
+            self.factor()
+
+    def resto_id(self):  # <resto_id>
+        
+        self.consome(TOKEN.abreParentese)
+        self.expression_list()
+        self.consome(TOKEN.fechaParentese)
+        
         pass
 
-    def fator(self):  # <factor>
+    def input_output(self):  # <inputOutput>
+
+        if token_lido[0] == TOKEN.writeln:
+            self.consome(TOKEN.writeln)
+            self.consome(TOKEN.abreParentese)
+            self.outputs()
+            self.consome(TOKEN.fechaParentese)
+
+        elif token_lido[0] == TOKEN.write:
+            self.consome(TOKEN.write)
+            self.consome(TOKEN.abreParentese)
+            self.outputs()
+            self.consome(TOKEN.fechaParentese)
+        
+        elif token_lido[0] == TOKEN.read:
+            self.consome(TOKEN.read)
+            self.consome(TOKEN.abreParentese)
+            self.consome(TOKEN.id)
+            self.consome(TOKEN.fechaParentese)
+
+        elif token_lido[0] == TOKEN.readln:
+            self.consome(TOKEN.readln)
+            self.consome(TOKEN.abreParentese)
+            self.consome(TOKEN.id)
+            self.consome(TOKEN.fechaParentese)
+
+    def outputs(self):  # <outputs>
+
+        self.out()
+        self.resto_outputs()
+
+    def resto_outputs(self):  # <restoOutputs>
+        
+        self.consome(TOKEN.virg)
+        self.out()
+        self.resto_outputs()
+        
         pass
 
-    def resto_identificador(self):  # <resto_id>
-        pass
+    def out(self):  # <out>
 
-    def entrada_saida(self):  # <inputOutput>
-        pass
+        if token_lido[0] == TOKEN.numInteger:
+            self.consome(TOKEN.numInteger)
 
-    def saidas(self):  # <outputs>
-        pass
+        elif token_lido[0] == TOKEN.numReal:
+            self.consome(TOKEN.numReal)
 
-    def resto_saidas(self):  # <restoOutputs>
-        pass
+        elif token_lido[0] == TOKEN.id:
+            self.consome(TOKEN.id)
 
-    def saida(self):  # <out>
+        elif token_lido[0] == TOKEN.string:
+            self.consome(TOKEN.string)
         pass

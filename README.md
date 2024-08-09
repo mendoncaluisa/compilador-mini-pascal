@@ -33,7 +33,7 @@ O compilador segua a gramatica a seguir
 	| real
 
 <subprogram_declarations> ->
-	<subprogram_declarion> ; <subprogram_declarations> 
+	<subprogram_declartion> ; <subprogram_declarations> 
 	| LAMBDA
 
 <subprogram_declaration> ->
@@ -140,24 +140,24 @@ O compilador segua a gramatica a seguir
 <resto_id> ->
 	LAMBDA
 	| ( <expression_list> )
-	
 
-<inputOutput> -> 
-    writeln(<outputs>)  
-    | write(<outputs>) 
-    | read(id) 
-    | readln(id) 
 
-<outputs> -> 
+<input_output> ->
+    writeln(<outputs>)
+    | write(<outputs>)
+    | read(id)
+    | readln(id)
+
+<outputs> ->
     <out> <restoOutputs>
 
-<restoOutputs> -> 
-    , <out> <restoOutputs> 
+<resto_outputs> ->
+    , <out> <restoOutputs>
     | LAMBDA
 
-<out> -> 
-    num 
-    | id 
+<out> ->
+    num
+    | id
     | string
 ````
 Características da gramática:
