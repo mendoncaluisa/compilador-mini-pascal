@@ -139,7 +139,8 @@ class Lexico:
                 elif simbolo == '.':
                     self.ungetchar(simbolo)
                     self.ungetchar(simbolo)
-                    lexema += simbolo
+                    # lexema += simbolo
+                    lexema = lexema[: - 1]
                     return TOKEN.numInteger, lexema, lin, col
                 else:
                     self.ungetchar(simbolo)

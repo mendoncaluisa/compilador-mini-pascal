@@ -94,7 +94,7 @@
 <expression_list> ->
 	<expression> <resto_expression_list>
 
-<resto_expression_list>
+<resto_expression_list> ->
 	, <expression> <resto_expression_list>
 	| LAMBDA
 

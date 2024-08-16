@@ -47,10 +47,11 @@ class TOKEN(IntEnum):
     OF = 34  # array de um tipo
 
     string = 35
-    write = 36
-    writeln = 37
-    read = 38
-    readln = 39
+    WRITE = 36
+    WRITELN = 37
+    READ = 38
+    READLN = 39
+    RETURN = 40
 
     @classmethod
     def msg(cls, token):
@@ -63,7 +64,7 @@ class TOKEN(IntEnum):
             6: 'número real',
             7: 'real',
             8: 'program',
-            9: 'funcrion',
+            9: 'function',
             10: 'procedure',
             11: ':=',
             12: 'inteiro',
@@ -93,7 +94,8 @@ class TOKEN(IntEnum):
             36: 'write',
             37: 'writeln',
             38: 'read',
-            39: 'readln'
+            39: 'readln',
+            40: 'return'
         }
         return nomes[token]
 
@@ -117,7 +119,12 @@ class TOKEN(IntEnum):
             'then': TOKEN.THEN,
             'mod': TOKEN.MULOP,
             'div': TOKEN.MULOP,
-            'of': TOKEN.OF
+            'of': TOKEN.OF,
+            'read': TOKEN.READ,
+            'readln': TOKEN.READLN,
+            'write': TOKEN.WRITE,
+            'writeln': TOKEN.WRITELN,
+            'return': TOKEN.RETURN
 
         }
         if lexema in reservadas:
