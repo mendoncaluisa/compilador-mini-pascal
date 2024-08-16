@@ -79,7 +79,7 @@ class Lexico:
                     estado = 2  # identificadores e palavras reservadas
                 elif simbolo.isdigit():
                     estado = 3  # números
-                elif simbolo == '':
+                elif simbolo == '"':
                     estado = 4  # strings
                 elif simbolo == "(":
                     return TOKEN.abreParentese, "(", lin, col

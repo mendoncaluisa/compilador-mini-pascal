@@ -36,14 +36,24 @@ class Semantico:
     #   self.alvo.write(linha)
 
     # pega os identificadores e seu respectivo tipo e salva na tabela de símbolos
+    # pega os identificadores e seu respectivo tipo e salva na tabela de símbolos
     def declara(self, nomes, tipo):  # tipo será uma string
+        # print(f'declara identificador {nomes} - {tipo} ')
 
-        for id in nomes:
-            if self.existe_id(id):
-                msg = f'Identificador {id} ja existente'
+        if isinstance(nomes, list):  # verifica se é uma lista de identificador
+            # ele verifica pq nem tudo vai ser uma lista
+            for id in nomes:
+                if self.existe_id(id):
+                    msg = f'Identificador {id} ja existente'
+                    self.erro_semantico(msg)
+                else:
+                    self.tabelaSimbolos[id] = tipo
+        else:  # caso não for uma lista é nome de function ou procedure
+            if self.existe_id(nomes):
+                msg = f'Identificador {nomes} ja existente'
                 self.erro_semantico(msg)
             else:
-                self.tabelaSimbolos[id] = tipo
+                self.tabelaSimbolos[nomes] = tipo
 
     def existe_id(self, identificador):
         if identificador in self.tabelaSimbolos:
