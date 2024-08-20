@@ -42,8 +42,8 @@ class TOKEN(IntEnum):
     doisPontos = 30
 
     relop = 31  # menor ou igual, menor, igual, maior ou igual, maior
-    MULOP = 32  # multiplicacao, divisao e mod
-    ADDOP = 33  # adição e subtração
+    mulop = 32  # multiplicacao, divisao e mod
+    addop = 33  # adição e subtração
     OF = 34  # array de um tipo
 
     string = 35
@@ -117,8 +117,8 @@ class TOKEN(IntEnum):
             'array': TOKEN.ARRAY,
             'do': TOKEN.DO,
             'then': TOKEN.THEN,
-            'mod': TOKEN.MULOP,
-            'div': TOKEN.MULOP,
+            'mod': TOKEN.mulop,
+            'div': TOKEN.mulop,
             'of': TOKEN.OF,
             'read': TOKEN.READ,
             'readln': TOKEN.READLN,

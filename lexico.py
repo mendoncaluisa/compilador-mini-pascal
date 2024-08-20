@@ -63,8 +63,10 @@ class Lexico:
                     simbolo = self.getchar()
                     while simbolo != '\n':
                         simbolo = self.getchar()
-                else: 
-                    estado = 9
+                else:
+                    self.ungetchar(simbolo)
+                    simbolo = '/'
+                    break
             while simbolo in [' ', '\t', '\n']:
                 simbolo = self.getchar()
 
@@ -108,7 +110,13 @@ class Lexico:
                 elif simbolo == "<":  # pode ser <, <=
                     estado = 8
                 elif simbolo == "*": 
-                    return TOKEN.MULOP, "*", lin, col
+                    return TOKEN.mulop, "*", lin, col
+                elif simbolo == "-":
+                    return TOKEN.addop, "-", lin, col
+                elif simbolo == "+":
+                    return TOKEN.addop, "+", lin, col
+                elif simbolo == "/":
+                    return TOKEN.mulop, "/", lin, col
 
             elif estado == 2:
                 # identificadores e palavras reservadas
@@ -205,8 +213,6 @@ class Lexico:
                     self.ungetchar(simbolo)
                     return TOKEN.relop, lexema, lin, col
                 
-            elif estado == 9:
-                return TOKEN.MULOP, '/', lin, col
             else:
                 print('BUG!!!')
 
