@@ -46,7 +46,7 @@ class Sintatico:
             raise Exception
 
 
-    def testaLexico(self):
+    def testa_lexico(self):
         self.tokenLido = self.lexico.get_token()
         (token, lexema, linha, coluna) = self.tokenLido
         while token != TOKEN.eof:

@@ -2,7 +2,7 @@ program TESTE();
 var
   a, b: integer;
 var
-  arr: array[1..10] of real;  // Declara um array de reais com 10 elementos }
+  arr: array[1..10] of real;  // Declara um array de reais com 10 elementos 
 
 procedure folder(a : real ; b : real);
 

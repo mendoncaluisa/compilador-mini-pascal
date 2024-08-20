@@ -27,7 +27,7 @@ if __name__ == '__main__':
     x = Tradutor('teste.txt')
     x.inicializa()
     x.traduz()
-    # x.lexico.testaLexico()
+    
     # x.sintatico.testa_lexico()
 
     x.finaliza()
