@@ -28,6 +28,6 @@ if __name__ == '__main__':
     x.inicializa()
     x.traduz()
     # x.lexico.testaLexico()
-    # x.sintatico.testa_lexico()
+    x.sintatico.testa_lexico()
 
     x.finaliza()
