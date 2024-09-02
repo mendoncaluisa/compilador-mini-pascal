@@ -23,7 +23,7 @@ class Semantico:
     #   self.alvo.close()
 
     def erro_semantico(self, msg):
-        (token, lexema, linha, coluna) = self.sintatico.tokenLido
+        (token, lexema, linha, coluna) = self.sintatico.token_lido
         print(f'Erro na linha {linha}: ')
         print(f' {msg}')
         raise Exception

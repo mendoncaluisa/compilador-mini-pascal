@@ -2,12 +2,12 @@ program TESTE();
 var
   a, b, soma, divisao: real;
 var
-  a: array[1..10] of real;  // Declara um array de reais com 10 elementos }
+  arr: array[1..10] of real;  // Declara um array de reais com 10 elementos }
 
 
 procedure folder(a : real ; b : real);
 var
-   b, soma, divisao: real;
+  a,  b, soma, divisao: real;
 begin
    writeln("a = ", a);
    writeln("b = ", b)
@@ -30,5 +30,5 @@ begin
   end;
 
   divisao := a / b;
-  writeln("soma = ", soma)
+  writeln("soma = ", soma)
 end.

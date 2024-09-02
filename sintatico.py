@@ -36,8 +36,8 @@ class Sintatico:
 
 
     def testa_lexico(self):
-        self.tokenLido = self.lexico.get_token()
-        (token, lexema, linha, coluna) = self.tokenLido
+        self.token_lido = self.lexico.get_token()
+        (token, lexema, linha, coluna) = self.token_lido
         while token != TOKEN.eof:
             self.lexico.imprime_token(self.token_lido)
             self.token_lido = self.lexico.get_token()
@@ -67,7 +67,6 @@ class Sintatico:
         lista2 = self.resto_identifier_list()
         return lista + lista2
 
-    # DÚVIDA
     # <resto_identifier_list> ->, id < resto_identifier_list > | LAMBDA
     def resto_identifier_list(self):
         if self.token_lido[0] == TOKEN.virg:
@@ -116,7 +115,6 @@ class Sintatico:
             self.consome(TOKEN.REAL)
             return TOKEN.REAL
 
-    # SUBPROGRAM DECLARION?
     # <subprogram_declarations> -> <subprogram_declarion> ; <subprogram_declarations> | LAMBDA
     def subprogram_declarations(self):
         if self.token_lido[0] == TOKEN.BEGIN:
@@ -217,7 +215,7 @@ class Sintatico:
             nome = self.token_lido[1]
             if self.semantico.existe_id(nome):
                 tipo = self.semantico.consulta_tipo_id(nome)
-                if tipo in [TOKEN.INTEGER, TOKEN.REAL]:
+                if tipo[0] in [TOKEN.INTEGER, TOKEN.REAL]:
                     self.variable()
                     self.consome(TOKEN.assignop)
                     self.expression()
